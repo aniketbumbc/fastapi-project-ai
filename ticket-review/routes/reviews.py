@@ -1,4 +1,4 @@
-from fastapi import APIRouter,Depends, Query
+from fastapi import APIRouter,Depends, Query, HTTPException
 from sqlmodel import Session, select, func
 from models import Review, ReviewCreate, ReviewRead, ReviewUpdate
 from database import get_session
@@ -30,3 +30,43 @@ def list_reviews(
     query = query.offset(skip).limit(limit)
     reviews = session.exec(query).all()
     return reviews
+
+
+@router.get("/average/{movie_name}")
+def get_average_rating(movie_name:str,session:Session = Depends(get_session)):
+    result = session.exec(select(func.avg(Review.rating),func.count(Review.id)).where(Review.play_name == movie_name)).first()
+    avg_rating,total_reviews = result
+    if total_reviews == 0:
+        raise HTTPException(status_code=404, details= f"No review found {movie_name}")
+
+
+    return {
+        "Movie_Name": movie_name,
+        "Avg_rating": round(avg_rating,2),
+        "total_reviews": total_reviews
+    }
+
+@router.get("/{review_id}", response_model=ReviewRead)
+def get_review(review_id:int,session:Session = Depends(get_session)):
+    review = session.get(Review,review_id)
+
+    if not review:
+        raise HTTPException(status_code=404, details= f"No review found {review_id}")
+
+
+@router.patch("/{review_id}", response_model=ReviewRead)
+def update_review(review_id:int, update:ReviewUpdate, session:Session = Depends(get_session)):
+    review = session.get(Review,review_id)
+
+    if not review:
+        raise HTTPException(status_code=404, details= f"No review found {review_id}")
+
+    update_data = update.model_dump(exclude_unset=True)
+    for key,value in update_data.items():
+        setattr(review,key,value)
+
+    session.add(review)
+    session.commit()
+    session.refresh(review)
+
+    return review
