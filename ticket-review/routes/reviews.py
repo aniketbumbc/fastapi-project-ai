@@ -53,6 +53,8 @@ def get_review(review_id:int,session:Session = Depends(get_session)):
     if not review:
         raise HTTPException(status_code=404, details= f"No review found {review_id}")
 
+    return review
+
 
 @router.patch("/{review_id}", response_model=ReviewRead)
 def update_review(review_id:int, update:ReviewUpdate, session:Session = Depends(get_session)):
@@ -70,3 +72,16 @@ def update_review(review_id:int, update:ReviewUpdate, session:Session = Depends(
     session.refresh(review)
 
     return review
+
+
+@router.delete("/{review_id}")
+def delete_review(review_id:int,session:Session = Depends(get_session)):
+    review = session.get(Review,review_id)
+
+    if not review:
+            raise HTTPException(status_code=404, details= f"No review found {review_id}")
+
+    session.delete(review)
+    session.commit()
+
+    return{"Message": f"Review {review_id} delete successfully"}
