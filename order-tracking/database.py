@@ -1,0 +1,16 @@
+from sqlmodel import create_engine, Session, SQLModel
+from models import Order, OrderStatusLog
+
+
+DATABASE_URL = "sqlite:///orders.db"
+
+engine = create_engine(DATABASE_URL, echo=True)
+
+def create_tables():
+    SQLModel.metadata.create_all(engine)
+
+def get_session():
+    with Session(engine) as session:
+        yield session
+
+def add_order(session: Session, order: Order):
