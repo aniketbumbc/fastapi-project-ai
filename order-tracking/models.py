@@ -28,7 +28,7 @@ class OrderCreate(BaseModel):
     item: str
 
 # schema for updating an order
-class OrderUpdateStatus(BaseModel):
+class OrderUpdate(BaseModel):
     status: Optional[OrderStatus] = None
     updated_at: datetime = Field(default_factory=datetime.now)
     delivery_address: Optional[str] = None
