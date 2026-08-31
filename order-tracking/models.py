@@ -2,6 +2,7 @@ from enum import Enum
 from datetime import datetime
 from typing import List, Optional
 from sqlmodel import Field, SQLModel, Relationship
+from pydantic import BaseModel
 
 
 class OrderStatus(str, Enum):
@@ -36,7 +37,7 @@ class OrderUpdate(BaseModel):
 
 
 #status log for an order
-class OrderStatusLog(SQLModel)
+class OrderStatusLog(SQLModel):
     order_id: int
     old_status:str
     new_status:str

@@ -12,5 +12,3 @@ def create_tables():
 def get_session():
     with Session(engine) as session:
         yield session
-
-def add_order(session: Session, order: Order):

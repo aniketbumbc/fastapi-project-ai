@@ -21,7 +21,10 @@ async def daily_revenue(summary_date: date | None = Query(default=None), session
     summary = {}
     total_amount = 0
     for status in OrderStatus:
-        select(func.count(Order.id)).where(Order.status == status, Order.created_at >= start, Order.created_at <= end).one()
+        query = select(func.count(Order.id)).where(Order.status == status, Order.created_at >= start, Order.created_at <= end)
+        count = session.exec(
+            query
+        ).one()
         summary[status.value] = count
         total_amount += count
 
