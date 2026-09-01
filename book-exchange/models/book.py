@@ -35,3 +35,10 @@ class Book(SQLModel, table=True):
         price: float
         is_sold: bool
         owner_id: int
+
+
+    class BookUpdate(SQLModel):
+        title: Optional[str] = None
+        author: Optional[str] = None
+        price: Optional[float] = None
+        is_sold: Optional[bool] = None
