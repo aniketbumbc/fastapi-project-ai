@@ -1,6 +1,8 @@
 from sqlmodel import Field, SQLModel, Relationship
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from models.user import User
 
 
 class Book(SQLModel, table=True):
@@ -14,31 +16,27 @@ class Book(SQLModel, table=True):
     owner: Optional["User"] = Relationship(back_populates="books")
 
 
-   
-    # avoid circular import
-    from models.user import User
-    Book.model_rebuild()
-
-    # request body for create book
-    class BookCreate(SQLModel):
-        title: str
-        author: str
-        price: float
-        is_sold: bool = False
-        owner_id: int
-
-    # response body
-    class BookResponse(SQLModel):
-        id: int
-        title: str
-        author: str
-        price: float
-        is_sold: bool
-        owner_id: int
+# request body for create book
+class BookCreate(SQLModel):
+    title: str
+    author: str
+    price: float
+    is_sold: bool = False
+    owner_id: int
 
 
-    class BookUpdate(SQLModel):
-        title: Optional[str] = None
-        author: Optional[str] = None
-        price: Optional[float] = None
-        is_sold: Optional[bool] = None
+# response body
+class BookResponse(SQLModel):
+    id: int
+    title: str
+    author: str
+    price: float
+    is_sold: bool
+    owner_id: int
+
+
+class BookUpdate(SQLModel):
+    title: Optional[str] = None
+    author: Optional[str] = None
+    price: Optional[float] = None
+    is_sold: Optional[bool] = None

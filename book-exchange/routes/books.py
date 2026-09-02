@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlmodel import Session, select
 from database import get_session
 from models.book import Book, BookCreate, BookResponse, BookUpdate
-from auth import verify_api_key
+from auth import verify_api_key, API_KEY
 from typing import Optional, List
 
 router = APIRouter(
@@ -27,8 +27,10 @@ def get_books(
    if price:
     query = query.where(Book.price <= price)
 
-    books = session.exec(query).all()
-    return books
+   books = session.exec(query).all()
+   if not books:
+       raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No books found")
+   return books
 
 
 # create a new book

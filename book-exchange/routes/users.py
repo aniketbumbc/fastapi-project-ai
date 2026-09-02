@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import Session, select
 from database import get_session
 from models.user import User, UserCreate, UserResponse
-from auth import verify_api_key
+from auth import verify_api_key, API_KEY
+from typing import List
 
 router = APIRouter(
     prefix="/users",
