@@ -27,4 +27,3 @@ vector_store = QdrantVectorStore.from_documents(
     url="http://localhost:6333",
 )
 
-print(vector_store)
