@@ -13,4 +13,9 @@ class WeatherResponseModel(BaseModel):
     temperature: float
     humidity: float
     rain_chance: float
-    
+
+
+class OrganicResultModel(BaseModel):
+    title: str
+    link: str
+    snippet: str | None = None
