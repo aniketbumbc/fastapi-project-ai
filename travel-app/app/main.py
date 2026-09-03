@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-
+from app.routes.planner import router as planner_router
 app = FastAPI(title='Travel App', description='Aggreate travel data from multiple sources to provide a comprehensive view of travel destinations')
 
 @app.get('/')
@@ -12,3 +12,6 @@ async def root():
         "GET /api/v1/plan/cache-stash": "Cache stash for travel plan",
         "DELETE /api/v1/plan/cache-stash": "Delete cache stash for travel plan",
     }}
+
+
+app.include_router(planner_router)
