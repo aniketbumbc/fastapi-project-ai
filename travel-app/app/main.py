@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from app.routes.planner import router as planner_router
+from app.routes.stream import router as stream_router
 app = FastAPI(title='Travel App', description='Aggreate travel data from multiple sources to provide a comprehensive view of travel destinations')
 
 @app.get('/')
@@ -15,3 +16,4 @@ async def root():
 
 
 app.include_router(planner_router)
+app.include_router(stream_router)
